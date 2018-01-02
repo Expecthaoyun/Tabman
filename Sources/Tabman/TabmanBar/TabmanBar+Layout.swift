@@ -8,10 +8,12 @@
 
 import UIKit
 
+import SnapKit
+
 // MARK: - Bar location management
 internal extension TabmanBar {
     
-    @discardableResult func barAutoPinToTop(topLayoutGuide: UILayoutSupport) -> [NSLayoutConstraint]? {
+    @discardableResult func barAutoPinToTop(topLayoutGuide: UILayoutSupport,topView:UIView!,leftView:UIView!,rightView:UIView!) -> [NSLayoutConstraint]? {
         guard self.superview != nil else {
             return nil
         }
@@ -20,13 +22,82 @@ internal extension TabmanBar {
         var constraints = [NSLayoutConstraint]()
         
         let margins = self.layoutMargins
-        let views: [String: Any] = ["view": self, "topLayoutGuide": topLayoutGuide]
-        let xConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[view]-0-|",
+        var views: [String: Any] = [
+            "view": self,
+            "topLayoutGuide": topLayoutGuide,
+            ]
+        var hVFL=""
+        if leftView == nil {
+            if rightView == nil {
+                hVFL = "H:|-[view]-|"
+                
+            }else{
+                hVFL = "H:|-0-[view(==topLayoutGuide)]-0-[rightView]-0-|"
+                views.updateValue(rightView!, forKey: "rightView")
+                rightView!.snp_makeConstraints { (make) -> Void in
+                    make.size.width.equalTo(self.snp.height)
+                    make.size.height.equalTo(self.snp.height)
+                }
+            }
+        }else if rightView == nil {
+            hVFL = "H:|-[leftView(\(leftSize)]-[view]-|"
+            leftView!.snp_makeConstraints { (make) -> Void in
+                make.size.width.equalTo(self.snp.height)
+                make.size.height.equalTo(self.snp.height)
+            }
+            views.updateValue(leftView!, forKey: "leftView")
+        }else{
+            hVFL = "H:|-[leftView(\(leftSize))]-[view]-[rightView]-|"
+            views.updateValue(rightView!, forKey: "rightView")
+            views.updateValue(leftView!, forKey: "leftView")
+            rightView!.snp_makeConstraints { (make) -> Void in
+                make.size.width.equalTo(self.snp.height)
+                make.size.height.equalTo(self.snp.height)
+            }
+            leftView!.snp_makeConstraints { (make) -> Void in
+                make.size.width.equalTo(self.snp.height)
+                make.size.height.equalTo(self.snp.height)
+            }
+        }
+        
+        
+        var rvVFL=""
+        var lvVFL=""
+        var vVFL=""
+        if topView == nil{
+            vVFL="V:[topLayoutGuide]-%i-[view]"
+            rvVFL="V:[topLayoutGuide]-[rightView]"
+            lvVFL="V:[topLayoutGuide]-[leftView]"
+        }else{
+            vVFL="V:|-0-[topView]-0-[view]"
+            rvVFL="V:[topView]-0-[rightView]"
+            lvVFL="V:[topView]-0-[leftView]"
+            views.updateValue(topView!, forKey: "topView")
+            let topConstraints = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[topView]-0-|",
+                                                                options: NSLayoutFormatOptions(),
+                                                                metrics: nil, views: views)
+            constraints.append(contentsOf: topConstraints)
+        }
+        let xConstraints = NSLayoutConstraint.constraints(withVisualFormat: hVFL,
                                                           options: NSLayoutFormatOptions(),
                                                           metrics: nil, views: views)
-        let yConstraints = NSLayoutConstraint.constraints(withVisualFormat: String(format: "V:[topLayoutGuide]-%i-[view]", -margins.top),
+        let yConstraints = NSLayoutConstraint.constraints(withVisualFormat: String(format: vVFL, -margins.top),
                                                           options: NSLayoutFormatOptions(),
                                                           metrics: nil, views: views)
+        if rightView != nil{
+            let rvConstraints = NSLayoutConstraint.constraints(withVisualFormat: rvVFL,
+                                                               options: NSLayoutFormatOptions(),
+                                                               metrics: nil, views: views)
+            constraints.append(contentsOf: rvConstraints)
+        }
+        
+        if leftView != nil{
+            let lvConstraints = NSLayoutConstraint.constraints(withVisualFormat: lvVFL,
+                                                               options: NSLayoutFormatOptions(),
+                                                               metrics: nil, views: views)
+            constraints.append(contentsOf: lvConstraints)
+        }
+        
         constraints.append(contentsOf: xConstraints)
         constraints.append(contentsOf: yConstraints)
         
@@ -39,7 +110,7 @@ internal extension TabmanBar {
             return nil
         }
         self.translatesAutoresizingMaskIntoConstraints = false
-
+        
         var constraints = [NSLayoutConstraint]()
         
         let margins = self.layoutMargins
@@ -120,8 +191,8 @@ internal extension TabmanBar {
         guard location == .top &&
             appearance.layout.extendBackgroundEdgeInsets ?? false &&
             canExtend else {
-            topPinConstraint.constant = 0.0
-            return
+                topPinConstraint.constant = 0.0
+                return
         }
         
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
@@ -153,11 +224,12 @@ internal extension TabmanBar {
             extendBackgroundEdgeInsets &&
             viewController.tabBarController == nil &&
             canExtend else {
-            bottomPinConstraint.constant = 0.0
-            return
+                bottomPinConstraint.constant = 0.0
+                return
         }
         
         let bottomSafeAreaInset = safeAreaInsets.bottom
         bottomPinConstraint.constant = bottomSafeAreaInset
     }
 }
+

@@ -38,6 +38,18 @@ open class TabmanViewController: PageboyViewController, PageboyViewControllerDel
     /// Able to set items, appearance, location and style through this object.
     public var bar = TabmanBar.Config()
     
+    public var leftView:UIView?
+    
+    public var leftSize:CGFloat=0
+    
+    public var rightView:UIView?
+    
+    public var rightSize:CGFloat=0
+    
+    public var topView:UIView?
+    
+    public var topHeight:CGFloat=0
+    
     /// Internal store for bar component transitions.
     internal var barTransitionStore = TabmanBarTransitionStore()
     
@@ -85,16 +97,18 @@ open class TabmanViewController: PageboyViewController, PageboyViewControllerDel
         
         let appearance = bar.appearance ?? .defaultAppearance
         let isBarExternal = embeddingView != nil || attachedTabmanBar != nil
-        activeTabmanBar?.updateBackgroundEdgesForSystemAreasIfNeeded(for: bar.actualLocation,
-                                                                     in: self,
-                                                                     appearance: appearance,
-                                                                     canExtend: !isBarExternal)
+        if self.topView == nil {
+            self.activeTabmanBar?.updateBackgroundEdgesForSystemAreasIfNeeded(for: self.bar.actualLocation,
+                                                                              in: self,
+                                                                              appearance: appearance,
+                                                                              canExtend: !isBarExternal)
+        }
     }
     
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         let bounds = CGRect(x: 0.0, y: 0.0, width: size.width, height: size.height)
-
+        
         coordinator.animate(alongsideTransition: { (_) in
             self.activeTabmanBar?.updateForCurrentPosition(bounds: bounds)
         }, completion: nil)
@@ -207,7 +221,7 @@ internal extension TabmanViewController {
         if let appearance = self.bar.appearance {
             bar.appearance = appearance
         }
-
+        
         self.tabmanBar = bar
     }
     
@@ -234,10 +248,31 @@ internal extension TabmanViewController {
         }
         
         // ensure bar is always on top
-        // Having to use CGFloat cast due to CGFloat.greatestFiniteMagnitude causing 
+        // Having to use CGFloat cast due to CGFloat.greatestFiniteMagnitude causing
         // "zPosition should be within (-FLT_MAX, FLT_MAX) range" error.
         bar.layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
+        if(self.leftView != nil && !self.view.subviews.contains(self.leftView!) ){
+            self.leftView!.translatesAutoresizingMaskIntoConstraints=false
+            bar.leftSize=self.leftSize
+            self.view.addSubview(self.leftView!)
+        }else{
+            bar.leftSize=0
+        }
         
+        if self.rightView != nil && !self.view.subviews.contains(self.rightView!) {
+            self.rightView!.translatesAutoresizingMaskIntoConstraints=false
+            bar.rightSize=self.rightSize
+            self.view.addSubview(self.rightView!)
+        }else{
+            bar.rightSize=0
+        }
+        if self.topView != nil && !self.view.subviews.contains(self.topView!) {
+            self.topView!.translatesAutoresizingMaskIntoConstraints=false
+            bar.topHeight=self.topHeight
+            self.view.addSubview(self.topView!)
+        }else{
+            bar.topHeight=self.topHeight
+        }
         bar.removeFromSuperview()
         self.view.addSubview(bar)
         
@@ -245,7 +280,8 @@ internal extension TabmanViewController {
         switch location {
             
         case .top:
-            bar.barAutoPinToTop(topLayoutGuide: self.topLayoutGuide)
+            bar.barAutoPinToTop(topLayoutGuide: self.topLayoutGuide,topView: self.topView,leftView: leftView,rightView: rightView)
+            
         case .bottom:
             bar.barAutoPinToBotton(bottomLayoutGuide: self.bottomLayoutGuide)
             
@@ -301,7 +337,7 @@ extension TabmanViewController: TabmanBarConfigHandler {
         guard self.attachedTabmanBar == nil else {
             return
         }
-
+        
         self.updateBar(withLocation: location)
     }
     
@@ -319,3 +355,4 @@ extension TabmanViewController: TabmanBarConfigHandler {
         setNeedsChildAutoInsetUpdate()
     }
 }
+

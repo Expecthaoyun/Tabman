@@ -20,5 +20,6 @@ Pod::Spec.new do |s|
 
   s.dependency 'Pageboy', '~> 2.2.0'
   s.dependency 'PureLayout', '~> 3.0'
+  s.dependency 'SnapKit'
 
 end
