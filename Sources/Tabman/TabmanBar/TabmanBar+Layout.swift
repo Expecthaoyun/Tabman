@@ -40,14 +40,14 @@ internal extension TabmanBar {
                 }
             }
         }else if rightView == nil {
-            hVFL = "H:|-[leftView(\(leftSize)]-[view]-|"
+            hVFL = "H:|-[leftView]-[view]-|"
             leftView!.snp_makeConstraints { (make) -> Void in
                 make.size.width.equalTo(self.snp.height)
                 make.size.height.equalTo(self.snp.height)
             }
             views.updateValue(leftView!, forKey: "leftView")
         }else{
-            hVFL = "H:|-[leftView(\(leftSize))]-[view]-[rightView]-|"
+            hVFL = "H:|-[leftView]-[view]-[rightView]-|"
             views.updateValue(rightView!, forKey: "rightView")
             views.updateValue(leftView!, forKey: "leftView")
             rightView!.snp_makeConstraints { (make) -> Void in
