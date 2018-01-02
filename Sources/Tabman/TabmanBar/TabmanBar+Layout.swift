@@ -69,7 +69,7 @@ internal extension TabmanBar {
             rvVFL="V:[topLayoutGuide]-[rightView]"
             lvVFL="V:[topLayoutGuide]-[leftView]"
         }else{
-            vVFL="V:|-0-[topView(\(self.topHeight)]-0-[view]"
+            vVFL="V:|-0-[topView(\(self.topHeight))]-0-[view]"
             rvVFL="V:[topView]-0-[rightView]"
             lvVFL="V:[topView]-0-[leftView]"
             views.updateValue(topView!, forKey: "topView")
