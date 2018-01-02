@@ -43,6 +43,8 @@ open class TabmanBar: UIView, TabmanBarLifecycle {
         }
     }
     
+    public var topHeight:CGFloat=0
+    
     internal private(set) var currentPosition: CGFloat = 0.0
     internal weak var transitionStore: TabmanBarTransitionStore?
     internal lazy var behaviorEngine = BarBehaviorEngine(for: self)

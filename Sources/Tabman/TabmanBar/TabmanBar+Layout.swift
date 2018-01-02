@@ -34,14 +34,14 @@ internal extension TabmanBar {
             }else{
                 hVFL = "H:|-0-[view(==topLayoutGuide)]-0-[rightView]-0-|"
                 views.updateValue(rightView!, forKey: "rightView")
-                rightView!.snp_makeConstraints { (make) -> Void in
+                rightView!.snp.makeConstraints { (make) -> Void in
                     make.size.width.equalTo(self.snp.height)
                     make.size.height.equalTo(self.snp.height)
                 }
             }
         }else if rightView == nil {
             hVFL = "H:|-[leftView]-[view]-|"
-            leftView!.snp_makeConstraints { (make) -> Void in
+            rightView!.snp.makeConstraints { (make) -> Void in
                 make.size.width.equalTo(self.snp.height)
                 make.size.height.equalTo(self.snp.height)
             }
@@ -50,11 +50,11 @@ internal extension TabmanBar {
             hVFL = "H:|-[leftView]-[view]-[rightView]-|"
             views.updateValue(rightView!, forKey: "rightView")
             views.updateValue(leftView!, forKey: "leftView")
-            rightView!.snp_makeConstraints { (make) -> Void in
+            rightView!.snp.makeConstraints { (make) -> Void in
                 make.size.width.equalTo(self.snp.height)
                 make.size.height.equalTo(self.snp.height)
             }
-            leftView!.snp_makeConstraints { (make) -> Void in
+            rightView!.snp.makeConstraints { (make) -> Void in
                 make.size.width.equalTo(self.snp.height)
                 make.size.height.equalTo(self.snp.height)
             }
@@ -69,7 +69,7 @@ internal extension TabmanBar {
             rvVFL="V:[topLayoutGuide]-[rightView]"
             lvVFL="V:[topLayoutGuide]-[leftView]"
         }else{
-            vVFL="V:|-0-[topView]-0-[view]"
+            vVFL="V:|-0-[topView(\(self.topHeight)]-0-[view]"
             rvVFL="V:[topView]-0-[rightView]"
             lvVFL="V:[topView]-0-[leftView]"
             views.updateValue(topView!, forKey: "topView")

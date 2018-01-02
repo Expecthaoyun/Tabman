@@ -40,11 +40,7 @@ open class TabmanViewController: PageboyViewController, PageboyViewControllerDel
     
     public var leftView:UIView?
     
-    public var leftSize:CGFloat=0
-    
     public var rightView:UIView?
-    
-    public var rightSize:CGFloat=0
     
     public var topView:UIView?
     
@@ -253,19 +249,14 @@ internal extension TabmanViewController {
         bar.layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
         if(self.leftView != nil && !self.view.subviews.contains(self.leftView!) ){
             self.leftView!.translatesAutoresizingMaskIntoConstraints=false
-            bar.leftSize=self.leftSize
             self.view.addSubview(self.leftView!)
-        }else{
-            bar.leftSize=0
         }
         
         if self.rightView != nil && !self.view.subviews.contains(self.rightView!) {
             self.rightView!.translatesAutoresizingMaskIntoConstraints=false
-            bar.rightSize=self.rightSize
             self.view.addSubview(self.rightView!)
-        }else{
-            bar.rightSize=0
         }
+        
         if self.topView != nil && !self.view.subviews.contains(self.topView!) {
             self.topView!.translatesAutoresizingMaskIntoConstraints=false
             bar.topHeight=self.topHeight
