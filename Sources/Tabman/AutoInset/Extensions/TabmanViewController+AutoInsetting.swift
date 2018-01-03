@@ -39,6 +39,10 @@ private extension TabmanViewController {
             layoutInsets.bottom = bottomLayoutGuide.length
         }
         
+        if topView != nil {
+            layoutInsets.top=0
+        }
+        
         self.bar.requiredInsets = TabmanBar.Insets(safeAreaInsets: layoutInsets,
                                                    bar: self.actualBarInsets())
     }
@@ -67,7 +71,12 @@ private extension TabmanViewController {
             insets.bottom = frame.size.height
             
         default:
-            insets.top = frame.size.height
+            if topView==nil{
+                insets.top = frame.size.height
+            }else{
+                insets.top = frame.size.height+topView?.frame.size.width
+            }
+            
         }
         return insets
     }
