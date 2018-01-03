@@ -74,7 +74,7 @@ private extension TabmanViewController {
             if topView==nil{
                 insets.top = frame.size.height
             }else{
-                insets.top = frame.size.height+topView!.frame.size.width
+                insets.top = frame.size.height+topView!.frame.size.height
             }
             
         }
