@@ -29,7 +29,7 @@ internal extension TabmanBar {
         var hVFL=""
         if leftView == nil {
             if rightView == nil {
-                hVFL = "H:|-[view]-|"
+                hVFL = "H:|-0-[view]-0-|"
                 
             }else{
                 hVFL = "H:|-0-[view(==topLayoutGuide)]-0-[rightView]-0-|"
