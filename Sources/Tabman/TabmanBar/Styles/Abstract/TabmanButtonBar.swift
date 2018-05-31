@@ -279,6 +279,16 @@ internal class TabmanButtonBar: TabmanBar {
     //
     
     @objc internal func tabButtonPressed(_ sender: UIButton) {
+        
+        for btn in self.buttons {
+            if btn == sender{
+                //                btn.titleLabel?.font=UIFont.systemFont(ofSize: 16)
+                btn.titleLabel?.font=UIFont(name:"Helvetica-Bold",size: 16)!
+            }else{
+                btn.titleLabel?.font=self.textFont
+            }
+        }
+        
         if let index = self.buttons.index(of: sender), (self.responder?.bar(self, shouldSelectItemAt: index) ?? true) {
             self.responder?.bar(self, didSelectItemAt: index)
         }

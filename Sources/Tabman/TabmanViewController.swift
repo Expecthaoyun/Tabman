@@ -20,7 +20,8 @@ open class TabmanViewController: PageboyViewController, PageboyViewControllerDel
     // MARK: Properties
     
     /// The internally managed Tabman bar.
-    internal fileprivate(set) var tabmanBar: TabmanBar?
+//    internal fileprivate(set) var tabmanBar: TabmanBar?
+    public var tabmanBar: TabmanBar?
     /// The currently attached TabmanBar (if it exists).
     internal var attachedTabmanBar: TabmanBar?
     /// The view that is currently being used to embed the instance managed TabmanBar.

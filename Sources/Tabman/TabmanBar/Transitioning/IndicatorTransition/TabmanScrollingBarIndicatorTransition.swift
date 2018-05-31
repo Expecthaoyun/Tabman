@@ -52,6 +52,10 @@ internal class TabmanScrollingBarIndicatorTransition: TabmanIndicatorTransition 
                                  lowerButton: UIButton,
                                  upperButton: UIButton) {
         
+        //滑动触发方法  但是字体大小改变无动画效果
+        lowerButton.titleLabel?.font=UIFont.systemFont(ofSize: 13)
+        upperButton.titleLabel?.font=UIFont.systemFont(ofSize: 13)
+        
         let layoutIsRtoL = bar.layoutIsRightToLeft
         if bar.indicatorIsProgressive {
             

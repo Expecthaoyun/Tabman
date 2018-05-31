@@ -52,6 +52,7 @@ class TabmanItemColorCrossfadeTransition: TabmanItemTransition {
                                progress: CGFloat) {
         guard targetButton !== oldTargetButton else {
             bar.focussedButton = targetButton
+            bar.focussedButton?.titleLabel?.font=UIFont(name:"Helvetica-Bold",size: 16)!
             return
         }
         
